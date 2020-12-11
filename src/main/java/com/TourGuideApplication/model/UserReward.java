@@ -1,15 +1,18 @@
-package com.TourGuideApplication.bean;
+package com.TourGuideApplication.model;
 
-public class UserRewardBean {
+import com.TourGuideApplication.bean.AttractionBean;
+import com.TourGuideApplication.bean.VisitedLocationBean;
+
+public class UserReward {
 
 	private VisitedLocationBean visitedLocationBean;
 	private AttractionBean attractionbean;
 	private int rewardCentralPoints;
 	
-	public UserRewardBean() {
+	public UserReward() {
 	}
 
-	public UserRewardBean(VisitedLocationBean visitedLocationBean, AttractionBean attractionbean,
+	public UserReward(VisitedLocationBean visitedLocationBean, AttractionBean attractionbean,
 			int rewardCentralPoints) {
 		super();
 		this.visitedLocationBean = visitedLocationBean;

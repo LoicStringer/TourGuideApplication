@@ -5,6 +5,9 @@ public class LocationBean {
 	private double longitude;
 	private double latitude;
 	
+	public LocationBean() {
+	}
+
 	public LocationBean(double longitude, double latitude) {
 		super();
 		this.longitude = longitude;

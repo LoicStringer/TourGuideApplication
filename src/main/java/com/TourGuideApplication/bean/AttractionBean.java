@@ -1,22 +1,36 @@
 package com.TourGuideApplication.bean;
 
+import java.util.UUID;
+
 public class AttractionBean {
 	
-	public String attractionName;
-    public String city;
-    public String state;
-    public double longitude;
-    public double latitude;
+	private UUID attractionId;
+	private String attractionName;
+	private String city;
+	private String state;
+	private double longitude;
+	private double latitude;
     
 	public AttractionBean() {
 	}
 
-	public AttractionBean(String attractionName, String city, String state, double longitude, double latitude) {
+	public AttractionBean(UUID attractionId, String attractionName, String city, String state, double longitude,
+			double latitude) {
+		super();
+		this.attractionId = attractionId;
 		this.attractionName = attractionName;
 		this.city = city;
 		this.state = state;
 		this.longitude = longitude;
 		this.latitude = latitude;
+	}
+
+	public UUID getAttractionId() {
+		return attractionId;
+	}
+
+	public void setAttractionId(UUID attractionId) {
+		this.attractionId = attractionId;
 	}
 
 	public String getAttractionName() {
@@ -58,6 +72,6 @@ public class AttractionBean {
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
-    
 
+	
 }
