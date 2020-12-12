@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.TourGuideApplication.bean.LocationBean;
 import com.TourGuideApplication.bean.VisitedLocationBean;
 import com.TourGuideApplication.model.User;
+import com.TourGuideApplication.responseentity.ClosestAttractionsList;
 import com.TourGuideApplication.responseentity.UsersLocationsList;
+import com.TourGuideApplication.service.AttractionLocationService;
 import com.TourGuideApplication.service.UserLocationService;
 import com.TourGuideApplication.service.UserService;
 
@@ -25,6 +27,9 @@ public class Controller {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AttractionLocationService attractionLocationservice;
 	
 	@GetMapping("/users/{id}/location")
 	public ResponseEntity<LocationBean> getUserLocation(@PathVariable UUID id){
@@ -41,6 +46,11 @@ public class Controller {
 	@PostMapping("/users")
 	public ResponseEntity<User> addUser(@RequestBody User user){
 		return ResponseEntity.ok(userService.addUser(user));
+	}
+	
+	@GetMapping("/{id}/attractions")
+	public ResponseEntity<ClosestAttractionsList> getTheUserClosestAttractions(@PathVariable UUID id){
+		return ResponseEntity.ok(attractionLocationservice.getTheUserClosestAttractions(id));
 	}
 
 }
