@@ -16,6 +16,7 @@ import com.TourGuideApplication.model.User;
 import com.TourGuideApplication.responseentity.ClosestAttractionsList;
 import com.TourGuideApplication.responseentity.UsersLocationsList;
 import com.TourGuideApplication.service.AttractionLocationService;
+import com.TourGuideApplication.service.AttractionRewardPointsService;
 import com.TourGuideApplication.service.UserLocationService;
 import com.TourGuideApplication.service.UserService;
 
@@ -30,6 +31,9 @@ public class Controller {
 	
 	@Autowired
 	private AttractionLocationService attractionLocationservice;
+	
+	@Autowired
+	private AttractionRewardPointsService attractionRewardPointsService;
 	
 	@GetMapping("/users/{id}/location")
 	public ResponseEntity<LocationBean> getUserLocation(@PathVariable UUID id){
@@ -53,4 +57,9 @@ public class Controller {
 		return ResponseEntity.ok(attractionLocationservice.getTheUserClosestAttractions(id));
 	}
 
+	@GetMapping("{userId}/attractions/{attractionId}/reward-points")
+	public int getAttractionRewardPoints(@PathVariable("userId") UUID userId,@PathVariable("attractionId") UUID attractionId) {
+		return attractionRewardPointsService.getAttractionRewardPoints(userId, attractionId);
+	}
+		
 }

@@ -22,6 +22,9 @@ public class AttractionLocationService {
 	private UserLocationService userLocationService;
 	
 	@Autowired
+	private AttractionRewardPointsService attractionRewardPointsService;
+	
+	@Autowired
 	private LocationProxy locationProxy;
 	
 	@Value("${closestAttractionsRetrieved.number}")
@@ -37,7 +40,7 @@ public class AttractionLocationService {
 			userClosestAttraction.setAttractionLocation(new LocationBean (v.getLatitude(),v.getLongitude()));
 			userClosestAttraction.setUserLocation(userLocation);
 			userClosestAttraction.setDistanceInMiles(k);
-			userClosestAttraction.setRewardPoints(0);
+			userClosestAttraction.setRewardPoints(attractionRewardPointsService.getAttractionRewardPoints(userId, v.getAttractionId()));
 			userClosestAttractionsList.addClosestAttraction(userClosestAttraction);
 		});
 		return userClosestAttractionsList;
