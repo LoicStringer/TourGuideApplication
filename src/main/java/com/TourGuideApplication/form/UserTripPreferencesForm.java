@@ -1,87 +1,68 @@
-package com.TourGuideApplication.model;
+package com.TourGuideApplication.form;
 
-import javax.money.CurrencyUnit;
-
-import org.javamoney.moneta.Money;
-
-public class UserTripPreferences {
+public class UserTripPreferencesForm {
 	
 	private int attractionProximity ;
-	private CurrencyUnit currency  ;
-	private Money lowerPricePoint ;
-	private Money highPricePoint ;
+	private String currency ;
+	private int lowerPricePoint ;
+	private int highPricePoint ;
 	private int tripDuration ;
 	private int ticketQuantity ;
 	private int numberOfAdults ;
 	private int numberOfChildren ;
 	
-	public UserTripPreferences() {
+	public UserTripPreferencesForm() {
 	}
-
+	
 	public int getAttractionProximity() {
 		return attractionProximity;
 	}
-
 	public void setAttractionProximity(int attractionProximity) {
 		this.attractionProximity = attractionProximity;
 	}
-
-	public CurrencyUnit getCurrency() {
+	public String getCurrency() {
 		return currency;
 	}
-
-	public void setCurrency(CurrencyUnit currency) {
+	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
-
-	public Money getLowerPricePoint() {
+	public int getLowerPricePoint() {
 		return lowerPricePoint;
 	}
-
-	public void setLowerPricePoint(Money lowerPricePoint) {
+	public void setLowerPricePoint(int lowerPricePoint) {
 		this.lowerPricePoint = lowerPricePoint;
 	}
-
-	public Money getHighPricePoint() {
+	public int getHighPricePoint() {
 		return highPricePoint;
 	}
-
-	public void setHighPricePoint(Money highPricePoint) {
+	public void setHighPricePoint(int highPricePoint) {
 		this.highPricePoint = highPricePoint;
 	}
-
 	public int getTripDuration() {
 		return tripDuration;
 	}
-
 	public void setTripDuration(int tripDuration) {
 		this.tripDuration = tripDuration;
 	}
-
 	public int getTicketQuantity() {
 		return ticketQuantity;
 	}
-
 	public void setTicketQuantity(int ticketQuantity) {
 		this.ticketQuantity = ticketQuantity;
 	}
-
 	public int getNumberOfAdults() {
 		return numberOfAdults;
 	}
-
 	public void setNumberOfAdults(int numberOfAdults) {
 		this.numberOfAdults = numberOfAdults;
 	}
-
 	public int getNumberOfChildren() {
 		return numberOfChildren;
 	}
-
 	public void setNumberOfChildren(int numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
 	
 	
-
+	
 }
