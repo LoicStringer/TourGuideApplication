@@ -81,6 +81,14 @@ public class UserTripPreferences {
 	public void setNumberOfChildren(int numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
 	}
+
+	@Override
+	public String toString() {
+		return "UserTripPreferences [attractionProximity=" + attractionProximity + ", currency=" + currency
+				+ ", lowerPricePoint=" + lowerPricePoint + ", highPricePoint=" + highPricePoint + ", tripDuration="
+				+ tripDuration + ", ticketQuantity=" + ticketQuantity + ", numberOfAdults=" + numberOfAdults
+				+ ", numberOfChildren=" + numberOfChildren + "]";
+	}
 	
 	
 

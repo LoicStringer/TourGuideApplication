@@ -1,9 +1,12 @@
 package com.TourGuideApplication.service;
 
+import java.util.UUID;
+
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 
 import org.javamoney.moneta.Money;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.TourGuideApplication.form.UserTripPreferencesForm;
@@ -12,6 +15,9 @@ import com.TourGuideApplication.model.UserTripPreferences;
 @Service
 public class UserTripPreferencesService {
 
+	@Autowired
+	private UserService userService;
+	
 	public UserTripPreferences convertUserPreferencesForm (UserTripPreferencesForm userTripPreferencesForm) {
 		UserTripPreferences userTripPreferences = new UserTripPreferences();
 		CurrencyUnit userTripPreferencesCurrency = Monetary.getCurrency(userTripPreferencesForm.getCurrency());
@@ -26,4 +32,9 @@ public class UserTripPreferencesService {
 		return userTripPreferences;
 	}
 	
+	public UserTripPreferencesForm addUserTripPreferences(UUID userId,UserTripPreferencesForm userTripPreferencesForm) {
+		UserTripPreferences userTripPreferences = convertUserPreferencesForm(userTripPreferencesForm);
+		userService.getUser(userId).setPreferences(userTripPreferences);
+		return userTripPreferencesForm;
+	}
 }

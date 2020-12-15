@@ -16,8 +16,8 @@ import com.TourGuideApplication.bean.VisitedLocationBean;
 @FeignClient(name = "tourguide-location-service", url = "localhost:9004")
 public interface LocationProxy {
 
-	@GetMapping("{id}/location")
-	VisitedLocationBean getUserLocation(@PathVariable("id") UUID id);
+	@GetMapping("{userId}/location")
+	VisitedLocationBean getUserLocation(@PathVariable("userId") UUID userId);
 	
 	@PostMapping("/attractions/distances")
 	TreeMap<Double,AttractionBean> getDistancesToAttractions(@RequestBody LocationBean location);
