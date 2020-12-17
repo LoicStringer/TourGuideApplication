@@ -18,6 +18,7 @@ import com.TourGuideApplication.model.User;
 @Component
 public class DataInitializer {
 	
+	/*
 	private Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 	
 	public void initializeTestsUsers(int testUserNumber) {
@@ -56,6 +57,6 @@ public class DataInitializer {
 		LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(30));
 		return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
 	}
-
-
+	
+	*/
 }

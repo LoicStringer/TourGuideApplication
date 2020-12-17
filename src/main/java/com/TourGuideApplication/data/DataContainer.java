@@ -11,6 +11,7 @@ import com.TourGuideApplication.model.User;
 @Component
 public class DataContainer {
 
+	/*
 	
 	private static DataInitializer dataInitializer ;
 	
@@ -27,5 +28,5 @@ public class DataContainer {
 	public static void clearUsersData() {
 		usersData.clear();
 	}
-
+	*/
 }

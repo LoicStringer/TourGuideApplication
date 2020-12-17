@@ -16,6 +16,7 @@ import com.TourGuideApplication.responseentity.UsersLocationsList.UserLocation;
 @Service
 public class UserLocationService {
 
+	
 	@Autowired
 	private LocationProxy locationProxy;
 
