@@ -15,6 +15,7 @@ import com.TourGuideApplication.model.UserTripPreferences;
 @Service
 public class UserTripPreferencesService {
 
+	/*
 	@Autowired
 	private UserService userService;
 	
@@ -37,4 +38,5 @@ public class UserTripPreferencesService {
 		userService.getUser(userId).setPreferences(userTripPreferences);
 		return userTripPreferencesForm;
 	}
+	*/
 }

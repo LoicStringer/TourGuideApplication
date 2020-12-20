@@ -15,10 +15,8 @@ import com.TourGuideApplication.bean.VisitedLocationBean;
 import com.TourGuideApplication.model.User;
 import com.TourGuideApplication.proxy.LocationProxy;
 import com.TourGuideApplication.proxy.UserProxy;
-import com.TourGuideApplication.service.UserLocationService;
+
 import com.TourGuideApplication.service.UserService;
-
-
 
 public class TourGuideApplicationTracker extends Thread{
 
@@ -28,12 +26,6 @@ public class TourGuideApplicationTracker extends Thread{
 	private boolean stop = false;
 
 	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private UserLocationService userLocationService;
-	
-	@Autowired
 	private LocationProxy locationProxy;
 	
 	@Autowired
@@ -41,19 +33,6 @@ public class TourGuideApplicationTracker extends Thread{
 	
 	public TourGuideApplicationTracker() {
 		executorService.submit(this);
-	}
-	
-	public void trackUserLocation(UUID userId) {
-		VisitedLocationBean visitedLocation = locationProxy.getUserLocation(userId);
-		userProxy.addUserVisitedLocation(userId, visitedLocation);
-		// rewardsService.generateUserRewards(user);
-	}
-	/**
-	 * Assures to shut down the Tracker thread
-	 */
-	public void stopTracking() {
-		stop = true;
-		executorService.shutdownNow();
 	}
 	
 	@Override
@@ -66,10 +45,10 @@ public class TourGuideApplicationTracker extends Thread{
 				break;
 			}
 			
-			List<User> users = userService.getAllUsers();
-			logger.debug("Begin Tracker. Tracking " + users.size() + " users.");
+			
+			logger.debug("Begin Tracker. Tracking " + allUsersIdList().size() + " users.");
 			stopWatch.start();
-			users.forEach(u -> userLocationService.trackUserLocation(u.getUserId()));
+			allUsersIdList().forEach(id -> trackUserLocation(id));
 			stopWatch.stop();
 			logger.debug("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds."); 
 			stopWatch.reset();
@@ -81,6 +60,25 @@ public class TourGuideApplicationTracker extends Thread{
 			}
 		}
 		
+	}
+	
+	private List<UUID> allUsersIdList(){
+		List<UUID> allUsersIdList = userProxy.getAllUsersIdList();
+		return allUsersIdList;
+	}
+	
+	private void trackUserLocation(UUID userId) {
+		VisitedLocationBean visitedLocation = locationProxy.getUserLocation(userId);
+		userProxy.addUserVisitedLocation(userId, visitedLocation);
+		// rewardsService.generateUserRewards(user);
+	}
+	
+	/**
+	 * Assures to shut down the Tracker thread
+	 */
+	public void stopTracking() {
+		stop = true;
+		executorService.shutdownNow();
 	}
 	
 }

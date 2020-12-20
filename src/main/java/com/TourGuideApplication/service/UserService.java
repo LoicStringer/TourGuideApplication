@@ -12,7 +12,7 @@ import com.TourGuideApplication.model.User;
 @Service
 public class UserService {
 	
-	
+	/*
 	public User getUser(UUID userId) {
 		return DataContainer.usersData.get(userId);
 	}
@@ -38,6 +38,6 @@ public class UserService {
 	public void clearAllUsersData() {
 		DataContainer.clearUsersData();
 	}
-	
+	*/
 	
 }

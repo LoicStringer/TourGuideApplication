@@ -19,6 +19,7 @@ import com.TourGuideApplication.proxy.RewardsProxy;
 @Service
 public class UserRewardService {
 	
+	/*
 	@Autowired 
 	private RewardsProxy rewardsProxy;
 	
@@ -58,6 +59,6 @@ public class UserRewardService {
 	private boolean checkRewardAwardingDistance (double distance) {
 		return(distance<rewardAwardingDistance);
 	}
-	
+	*/
 	
 }

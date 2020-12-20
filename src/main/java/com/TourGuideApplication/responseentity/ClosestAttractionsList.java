@@ -5,32 +5,34 @@ import java.util.List;
 
 import com.TourGuideApplication.bean.LocationBean;
 
+
+
 public class ClosestAttractionsList {
 	
-	private List<ClosestAttraction> closestAttractionsList;
+	private List<AttractionDetails> attractionDetailsList;
 	
 	public ClosestAttractionsList() {
-		this.closestAttractionsList = new ArrayList<ClosestAttraction>();
+		this.attractionDetailsList = new ArrayList<AttractionDetails>();
+	}
+/*
+	public void addAttractionDetails(AttractionDetails attractionDetails) {
+		attractionDetailsList.add(attractionDetails);
+	}
+*/	
+	public List<AttractionDetails> getAttractionDetailsList() {
+		return attractionDetailsList;
 	}
 
-	public void addClosestAttraction(ClosestAttraction closestAttraction) {
-		closestAttractionsList.add(closestAttraction);
-	}
-	
-	public List<ClosestAttraction> getClosestAttractionsList() {
-		return closestAttractionsList;
-	}
-
-	public void setClosestAttractionsList(List<ClosestAttraction> closestAttractionsList) {
-		this.closestAttractionsList = closestAttractionsList;
+	public void setAttractionDetailsList(List<AttractionDetails> attractionDetailsList) {
+		this.attractionDetailsList = attractionDetailsList;
 	}
 
 	@Override
 	public String toString() {
-		return "ClosestAttractionsList [closestAttractionsList=" + closestAttractionsList + "]";
+		return "ClosestAttractionsList [attractionDetailsList=" + attractionDetailsList + "]";
 	}
 
-	public class ClosestAttraction{
+	public class AttractionDetails{
 		
 		private String attractionName;
 		private LocationBean attractionLocation;
@@ -38,7 +40,7 @@ public class ClosestAttractionsList {
 		private double distanceInMiles;
 		private int rewardPoints;
 		
-		public ClosestAttraction() {
+		public AttractionDetails() {
 		}
 
 		public String getAttractionName() {
@@ -83,7 +85,7 @@ public class ClosestAttractionsList {
 
 		@Override
 		public String toString() {
-			return "ClosestAttraction [attractionName=" + attractionName + ", distanceInMiles=" + distanceInMiles
+			return "AttractionDetails [attractionName=" + attractionName + ", distanceInMiles=" + distanceInMiles
 					+ ", rewardPoints=" + rewardPoints + "]";
 		}
 		

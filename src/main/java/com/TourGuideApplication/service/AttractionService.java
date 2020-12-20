@@ -18,13 +18,12 @@ import com.TourGuideApplication.bean.LocationBean;
 import com.TourGuideApplication.model.User;
 import com.TourGuideApplication.proxy.LocationProxy;
 import com.TourGuideApplication.responseentity.ClosestAttractionsList;
-import com.TourGuideApplication.responseentity.ClosestAttractionsList.ClosestAttraction;
+import com.TourGuideApplication.responseentity.ClosestAttractionsList.AttractionsList;
 
 @Service
 public class AttractionService {
 	
-	@Autowired
-	private UserLocationService userLocationService;
+
 	
 	@Autowired
 	private UserRewardService userRewardService;
@@ -51,21 +50,7 @@ public class AttractionService {
 		return distancesToAttractionsMap;
 	}
 	
-	public ClosestAttractionsList getTheUserClosestAttractions(UUID userId) {
-		ClosestAttractionsList userClosestAttractionsList = new ClosestAttractionsList();
-		LocationBean userLocation = userLocationService.getUserLocation(userId).getLocation();
-		TreeMap<Double,AttractionBean> distancesToAttractions = getTheXFirstEntries(getDistancesToAttractionsMap(userLocation));
-		distancesToAttractions.forEach((k,v)->{
-			ClosestAttraction userClosestAttraction = new ClosestAttractionsList().new ClosestAttraction();
-			userClosestAttraction.setAttractionName(v.getAttractionName());
-			userClosestAttraction.setAttractionLocation(new LocationBean (v.getLatitude(),v.getLongitude()));
-			userClosestAttraction.setUserLocation(userLocation);
-			userClosestAttraction.setDistanceInMiles(k);
-			userClosestAttraction.setRewardPoints(userRewardService.getAttractionRewardPoints(userId, v.getAttractionId()));
-			userClosestAttractionsList.addClosestAttraction(userClosestAttraction);
-		});
-		return userClosestAttractionsList;
-	}
+	
 	
 	private List<AttractionBean> getVisitedAttractions (User user){
 		List<AttractionBean> VisitedAttractions = user.getUserRewardsList().stream()

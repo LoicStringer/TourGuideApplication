@@ -23,7 +23,7 @@ public class TripDealsService {
 	public void addTripDealsToUser (List<ProviderBean> tripDealsList, User user) {
 		user.setTripDealsList(tripDealsList);
 	}
-	
+	/*
 	public TripPricerDto buildTripPricerDto (UUID userId) {
 		User user = userService.getUser(userId);
 		TripPricerDto tripPricerDto = new TripPricerDto();
@@ -42,5 +42,5 @@ public class TripDealsService {
 		addTripDealsToUser(tripDealsList, userService.getUser(id));
 		return tripDealsList;
 	}
-	
+	*/
 }

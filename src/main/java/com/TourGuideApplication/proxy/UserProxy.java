@@ -1,5 +1,6 @@
 package com.TourGuideApplication.proxy;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,6 +17,9 @@ import com.TourGuideApplication.model.User;
 @FeignClient(name = "tourguide-user-service", url= "localhost:9001")
 public interface UserProxy {
 
+	@GetMapping("/users")
+	List<UUID> getAllUsersIdList();
+	
 	@GetMapping("/users/{userId}")
 	User getUser(@PathVariable ("userId") UUID userId);
 	

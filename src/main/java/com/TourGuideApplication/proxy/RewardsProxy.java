@@ -12,6 +12,5 @@ public interface RewardsProxy {
 
 	@GetMapping("{userId}/attractions/{attractionId}/reward-points")
 	int getAttractionRewardPoints(@PathVariable("userId") UUID userId,@PathVariable("attractionId") UUID attractionId) ;
-		
 	
 }
