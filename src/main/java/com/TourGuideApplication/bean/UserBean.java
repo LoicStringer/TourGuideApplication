@@ -1,14 +1,13 @@
-package com.TourGuideApplication.model;
+package com.TourGuideApplication.bean;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.TourGuideApplication.bean.ProviderBean;
-import com.TourGuideApplication.bean.VisitedLocationBean;
 
-public class User {
+
+public class UserBean {
 
 	private UUID userId;
 	private String userName;
@@ -16,14 +15,14 @@ public class User {
 	private String emailAddress;
 	private Date latestLocationTimestamp;
 	private List<VisitedLocationBean> visitedLocationsList = new ArrayList<>();
-	private List<UserReward> userRewardsList = new ArrayList<>();
-	private UserTripPreferences preferences = new UserTripPreferences();
+	private List<UserRewardBean> userRewardsList = new ArrayList<>();
+	private UserTripPreferencesBean bean = new UserTripPreferencesBean();
 	private List<ProviderBean> tripDealsList = new ArrayList<>();
 	
-	public User() {
+	public UserBean() {
 	}
 
-	public User(UUID userId, String userName, String phoneNumber, String emailAddress) {
+	public UserBean(UUID userId, String userName, String phoneNumber, String emailAddress) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -79,20 +78,20 @@ public class User {
 		this.visitedLocationsList = visitedLocationsList;
 	}
 
-	public List<UserReward> getUserRewardsList() {
+	public List<UserRewardBean> getUserRewardsList() {
 		return userRewardsList;
 	}
 
-	public void setUserRewardsList(List<UserReward> userRewardsList) {
+	public void setUserRewardsList(List<UserRewardBean> userRewardsList) {
 		this.userRewardsList = userRewardsList;
 	}
 
-	public UserTripPreferences getPreferences() {
-		return preferences;
+	public UserTripPreferencesBean getBean() {
+		return bean;
 	}
 
-	public void setPreferences(UserTripPreferences preferences) {
-		this.preferences = preferences;
+	public void setBean(UserTripPreferencesBean bean) {
+		this.bean = bean;
 	}
 
 	public List<ProviderBean> getTripDealsList() {

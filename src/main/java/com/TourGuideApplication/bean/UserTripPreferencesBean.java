@@ -1,10 +1,10 @@
-package com.TourGuideApplication.model;
+package com.TourGuideApplication.bean;
 
 import javax.money.CurrencyUnit;
 
 import org.javamoney.moneta.Money;
 
-public class UserTripPreferences {
+public class UserTripPreferencesBean {
 	
 	private int attractionProximity ;
 	private CurrencyUnit currency  ;
@@ -15,7 +15,7 @@ public class UserTripPreferences {
 	private int numberOfAdults ;
 	private int numberOfChildren ;
 	
-	public UserTripPreferences() {
+	public UserTripPreferencesBean() {
 	}
 
 	public int getAttractionProximity() {
@@ -84,7 +84,7 @@ public class UserTripPreferences {
 
 	@Override
 	public String toString() {
-		return "UserTripPreferences [attractionProximity=" + attractionProximity + ", currency=" + currency
+		return "UserTripPreferencesBean [attractionProximity=" + attractionProximity + ", currency=" + currency
 				+ ", lowerPricePoint=" + lowerPricePoint + ", highPricePoint=" + highPricePoint + ", tripDuration="
 				+ tripDuration + ", ticketQuantity=" + ticketQuantity + ", numberOfAdults=" + numberOfAdults
 				+ ", numberOfChildren=" + numberOfChildren + "]";

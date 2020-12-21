@@ -11,12 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.TourGuideApplication.bean.VisitedLocationBean;
-import com.TourGuideApplication.model.User;
 import com.TourGuideApplication.proxy.LocationProxy;
 import com.TourGuideApplication.proxy.UserProxy;
 
-import com.TourGuideApplication.service.UserService;
 
 public class TourGuideApplicationTracker extends Thread{
 
@@ -68,9 +65,8 @@ public class TourGuideApplicationTracker extends Thread{
 	}
 	
 	private void trackUserLocation(UUID userId) {
-		VisitedLocationBean visitedLocation = locationProxy.getUserLocation(userId);
-		userProxy.addUserVisitedLocation(userId, visitedLocation);
-		// rewardsService.generateUserRewards(user);
+		locationProxy.getUserLocation(userId);
+		userProxy.addUserReward(userId);
 	}
 	
 	/**

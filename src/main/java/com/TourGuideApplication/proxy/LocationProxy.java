@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.TourGuideApplication.bean.AttractionBean;
 import com.TourGuideApplication.bean.LocationBean;
+import com.TourGuideApplication.bean.VisitedLocationBean;
 
 
 @FeignClient(name = "tourguide-location-service", url = "localhost:9004")
 public interface LocationProxy {
 
 	@GetMapping("/users/{userId}/visited-locations/latest")
-	LocationBean getUserLocation(@PathVariable("userId") UUID userId);
+	VisitedLocationBean getUserLocation(@PathVariable("userId") UUID userId);
 	
 	@PostMapping("/attractions/distances")
 	TreeMap<Double,AttractionBean> getDistancesToAttractions (@RequestBody LocationBean location);

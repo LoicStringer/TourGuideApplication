@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.TourGuideApplication.bean.LocationBean;
-import com.TourGuideApplication.bean.VisitedLocationBean;
-import com.TourGuideApplication.model.User;
+import com.TourGuideApplication.bean.ProviderBean;
+import com.TourGuideApplication.bean.UserBean;
+import com.TourGuideApplication.bean.UserRewardBean;
+import com.TourGuideApplication.form.UserTripPreferencesForm;
 
 @FeignClient(name = "tourguide-user-service", url= "localhost:9001")
 public interface UserProxy {
@@ -21,11 +23,21 @@ public interface UserProxy {
 	List<UUID> getAllUsersIdList();
 	
 	@GetMapping("/users/{userId}")
-	User getUser(@PathVariable ("userId") UUID userId);
-	
-	@PostMapping("/users/{userId}/visited-locations")
-	void addUserVisitedLocation(@PathVariable ("userId")UUID userId, @RequestBody VisitedLocationBean visitedLocation);
+	UserBean getUserBean(@PathVariable ("userId") UUID userId);
 	
 	@GetMapping("/users/visited-locations/latest")
 	Map<UUID,LocationBean> getEachUserLatestLocationList();
+
+	@PostMapping("/users/{userId}/trip-preferences")
+	void addUserTripPreferences(@PathVariable ("userId")UUID userId, @RequestBody  UserTripPreferencesForm userTripPreferencesForm);
+	
+	@PostMapping("/users/{userId}/trip-deals")
+	List<ProviderBean> getUserTripDeals (@PathVariable ("userId")UUID userId);
+
+	@GetMapping("/users/{userId}/rewards")
+	List<UserRewardBean> getUserRewardList(@PathVariable ("userId")UUID userId);
+
+	@PostMapping("/users/{userId}/rewards/latest")
+	UserRewardBean addUserReward(@PathVariable ("userId")UUID userId);
+	
 }
