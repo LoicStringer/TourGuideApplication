@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,11 @@ public class TourGuideApplicationService {
 		return userProxy.getUserBean(userId);
 	}
 	
+	public UserBean addUser(UserBean user) {
+		userProxy.addUser(user);
+		return user;
+	}
+	
 	public LocationBean getUserLocation(UUID userId) {
 		return locationProxy.getUserLocation(userId).getLocation();
 	}
@@ -64,15 +70,16 @@ public class TourGuideApplicationService {
 		ClosestAttractionsList userClosestAttractionsList = new ClosestAttractionsList();
 		VisitedLocationBean userLocation = locationProxy.getUserLocation(userId);
 		TreeMap<Double,AttractionBean> distancesToAttractions = getTheXFirstEntries(locationProxy.getDistancesToAttractions(userLocation.getLocation()));
-		distancesToAttractions.forEach((k,v)->{
+		List<AttractionDetails> attractionDetailsList = distancesToAttractions.entrySet().parallelStream().map(entry->{
 			AttractionDetails attractionDetails = new ClosestAttractionsList().new AttractionDetails();
-			attractionDetails.setAttractionName(v.getAttractionName());
-			attractionDetails.setAttractionLocation(new LocationBean (v.getLatitude(),v.getLongitude()));
+			attractionDetails.setAttractionName(entry.getValue().getAttractionName());
+			attractionDetails.setAttractionLocation(new LocationBean (entry.getValue().getLatitude(),entry.getValue().getLongitude()));
 			attractionDetails.setUserLocation(userLocation.getLocation());
-			attractionDetails.setDistanceInMiles(k);
-			attractionDetails.setRewardPoints(rewardsProxy.getAttractionRewardPoints(userId, v.getAttractionId()));
-			userClosestAttractionsList.getAttractionDetailsList().add(attractionDetails);
-		});
+			attractionDetails.setDistanceInMiles(entry.getKey());
+			attractionDetails.setRewardPoints(rewardsProxy.getAttractionRewardPoints(userId, entry.getValue().getAttractionId()));
+			return attractionDetails;
+		}).collect(Collectors.toList());
+		userClosestAttractionsList.setAttractionDetailsList(attractionDetailsList);
 		return userClosestAttractionsList;
 	}
 	
@@ -84,5 +91,5 @@ public class TourGuideApplicationService {
 				});
 		return filteredTreeMap;
 	}
-	
+
 }

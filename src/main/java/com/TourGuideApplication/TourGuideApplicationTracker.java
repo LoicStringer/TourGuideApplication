@@ -1,7 +1,5 @@
 package com.TourGuideApplication;
 
-import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -9,10 +7,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.TourGuideApplication.proxy.LocationProxy;
-import com.TourGuideApplication.proxy.UserProxy;
+import com.TourGuideApplication.service.TrackerService;
 
 
 public class TourGuideApplicationTracker extends Thread{
@@ -22,13 +18,10 @@ public class TourGuideApplicationTracker extends Thread{
 	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 	private boolean stop = false;
 
-	@Autowired
-	private LocationProxy locationProxy;
+	private TrackerService trackerService;
 	
-	@Autowired
-	private UserProxy userProxy;
-	
-	public TourGuideApplicationTracker() {
+	public TourGuideApplicationTracker(TrackerService trackerService) {
+		this.trackerService = trackerService;
 		executorService.submit(this);
 	}
 	
@@ -41,13 +34,13 @@ public class TourGuideApplicationTracker extends Thread{
 				logger.debug("Tracker stopping");
 				break;
 			}
-			
-			
-			logger.debug("Begin Tracker. Tracking " + allUsersIdList().size() + " users.");
+			System.out.println("Begin Tracker. Tracking " + trackerService.getAllUsersIdList().size() + " users.");
+			//logger.debug("Begin Tracker. Tracking " + trackerService.getAllUsersIdList().size() + " users.");
 			stopWatch.start();
-			allUsersIdList().forEach(id -> trackUserLocation(id));
+			trackerService.getAllUsersIdList().parallelStream().forEach(id -> trackerService.trackUserLocation(id));
 			stopWatch.stop();
-			logger.debug("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds."); 
+			System.out.println("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+			//logger.debug("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds."); 
 			stopWatch.reset();
 			try {
 				logger.debug("Tracker sleeping");
@@ -57,16 +50,6 @@ public class TourGuideApplicationTracker extends Thread{
 			}
 		}
 		
-	}
-	
-	private List<UUID> allUsersIdList(){
-		List<UUID> allUsersIdList = userProxy.getAllUsersIdList();
-		return allUsersIdList;
-	}
-	
-	private void trackUserLocation(UUID userId) {
-		locationProxy.getUserLocation(userId);
-		userProxy.addUserReward(userId);
 	}
 	
 	/**

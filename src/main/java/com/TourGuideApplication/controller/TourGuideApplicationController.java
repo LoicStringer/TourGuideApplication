@@ -26,6 +26,11 @@ public class TourGuideApplicationController {
 	@Autowired
 	private TourGuideApplicationService tourGuideApplicationService;
 	
+	@PostMapping("/users")
+	public ResponseEntity<UserBean> addUser(@RequestBody UserBean user){
+		return ResponseEntity.ok(tourGuideApplicationService.addUser(user));
+	}
+	
 	@GetMapping("/users/{userId}")
 	public ResponseEntity<UserBean> getUserBean(@PathVariable UUID userId){
 		return ResponseEntity.ok(tourGuideApplicationService.getUserBean(userId));

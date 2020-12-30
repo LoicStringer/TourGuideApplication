@@ -25,13 +25,16 @@ public interface UserProxy {
 	@GetMapping("/users/{userId}")
 	UserBean getUserBean(@PathVariable ("userId") UUID userId);
 	
+	@PostMapping("/users")
+	UserBean addUser(@RequestBody UserBean user);
+	
 	@GetMapping("/users/visited-locations/latest")
 	Map<UUID,LocationBean> getEachUserLatestLocationList();
 
 	@PostMapping("/users/{userId}/trip-preferences")
 	void addUserTripPreferences(@PathVariable ("userId")UUID userId, @RequestBody  UserTripPreferencesForm userTripPreferencesForm);
 	
-	@PostMapping("/users/{userId}/trip-deals")
+	@GetMapping("/users/{userId}/trip-deals")
 	List<ProviderBean> getUserTripDeals (@PathVariable ("userId")UUID userId);
 
 	@GetMapping("/users/{userId}/rewards")
