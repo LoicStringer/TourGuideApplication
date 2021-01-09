@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.TourGuideApplication.bean.LocationBean;
 
-
-
 public class ClosestAttractionsList {
 	
 	private List<AttractionDetails> attractionDetailsList;

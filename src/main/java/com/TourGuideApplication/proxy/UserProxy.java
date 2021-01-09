@@ -43,4 +43,6 @@ public interface UserProxy {
 	@PostMapping("/users/{userId}/rewards/latest")
 	UserRewardBean addUserReward(@PathVariable ("userId")UUID userId);
 	
+	@PostMapping("/tests/performance/locations")
+	void performanceTestUsersGeneration(@RequestBody int userNumber);
 }

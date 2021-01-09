@@ -2,13 +2,16 @@ package com.TourGuideApplication.service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.TourGuideApplication.TourGuideApplicationTracker;
 import com.TourGuideApplication.proxy.LocationProxy;
 import com.TourGuideApplication.proxy.UserProxy;
+
 
 @Service
 public class TrackerService {
@@ -19,12 +22,19 @@ public class TrackerService {
 	@Autowired
 	private UserProxy userProxy;
 	
-	public TourGuideApplicationTracker tourGuideApplicationTracker;
+	
 	
 	public TrackerService() {
-		tourGuideApplicationTracker = new TourGuideApplicationTracker(this);
 	}
 
+	public void trackUsers() {
+		getAllUsersIdList().parallelStream().forEach(id -> {
+			trackUserLocation(id);
+			addUserReward(id);
+		});
+		
+	}
+	
 	public List<UUID> getAllUsersIdList(){
 		List<UUID> allUsersIdList = userProxy.getAllUsersIdList();
 		return allUsersIdList;
@@ -32,6 +42,9 @@ public class TrackerService {
 	
 	public void trackUserLocation(UUID userId) {
 		locationProxy.getUserLocation(userId);
+	}
+	
+	public void addUserReward(UUID userId) {
 		userProxy.addUserReward(userId);
 	}
 	
