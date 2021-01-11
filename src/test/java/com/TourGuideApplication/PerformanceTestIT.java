@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,10 +24,11 @@ class PerformanceTestIT {
 	@Autowired
 	private TrackerService trackerService;
 	
+	@Disabled
 	@Test
-	void test() {
+	void trackUserPerformanceTest() {
 		StopWatch stopWatch = new StopWatch();
-		int[] usersNumberArray = new int[] { 100, 1000, 5000, 10000, 50000, 100000 };
+		int[] usersNumberArray = new int[] {100,1000,5000,10000,50000,100000};
 		for (int i : usersNumberArray) {
 			stopWatch.reset();
 			userProxy.performanceTestUsersGeneration(i);
@@ -35,6 +37,23 @@ class PerformanceTestIT {
 			stopWatch.stop();
 			System.out.println("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 			assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
+		}
+	}
+	
+	@Test
+	void addUserRewardPerformanceTest() {
+		StopWatch stopWatch = new StopWatch();
+		int[] usersNumberArray = new int[] {100,1000,5000,10000,50000,100000};
+		for (int i : usersNumberArray) {
+			stopWatch.reset();
+			userProxy.performanceTestUsersGeneration(i);
+			stopWatch.start();
+			trackerService.getAllUsersIdList().parallelStream().forEach(id->{
+				trackerService.addUserReward(id);
+			});
+			stopWatch.stop();
+			System.out.println("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+			assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 		}
 	}
 
