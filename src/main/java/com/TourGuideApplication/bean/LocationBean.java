@@ -2,23 +2,15 @@ package com.TourGuideApplication.bean;
 
 public class LocationBean {
 
-	private double longitude;
 	private double latitude;
+	private double longitude;
+	
 	
 	public LocationBean() {
 	}
 
-	public LocationBean(double longitude, double latitude) {
-		super();
-		this.longitude = longitude;
+	public LocationBean(double latitude, double longitude) {
 		this.latitude = latitude;
-	}
-
-	public double getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
@@ -30,6 +22,12 @@ public class LocationBean {
 		this.latitude = latitude;
 	}
 	
-	
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 	
 }

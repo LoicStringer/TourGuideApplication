@@ -24,7 +24,7 @@ class PerformanceTestIT {
 	@Autowired
 	private TrackerService trackerService;
 	
-	@Disabled
+	
 	@Test
 	void trackUserPerformanceTest() {
 		StopWatch stopWatch = new StopWatch();
@@ -40,6 +40,7 @@ class PerformanceTestIT {
 		}
 	}
 	
+	@Disabled
 	@Test
 	void addUserRewardPerformanceTest() {
 		StopWatch stopWatch = new StopWatch();

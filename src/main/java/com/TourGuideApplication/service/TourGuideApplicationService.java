@@ -39,6 +39,13 @@ public class TourGuideApplicationService {
 	@Value("${closestAttractionsRetrieved.number}")
 	private int attractionRetrievedNumber;
 	
+	public TourGuideApplicationService() {
+	}
+
+	public TourGuideApplicationService(int attractionRetrievedNumber) {
+		this.attractionRetrievedNumber = attractionRetrievedNumber;
+	}
+
 	public UserBean getUserBean(UUID userId) {
 		return userProxy.getUserBean(userId);
 	}
@@ -92,4 +99,12 @@ public class TourGuideApplicationService {
 		return filteredTreeMap;
 	}
 
+	public int getAttractionRetrievedNumber() {
+		return attractionRetrievedNumber;
+	}
+
+	public void setAttractionRetrievedNumber(int attractionRetrievedNumber) {
+		this.attractionRetrievedNumber = attractionRetrievedNumber;
+	}
+	
 }

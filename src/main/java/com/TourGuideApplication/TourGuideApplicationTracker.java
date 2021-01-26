@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.TourGuideApplication.service.TrackerService;
 
+
 @Component
 public class TourGuideApplicationTracker extends Thread {
 

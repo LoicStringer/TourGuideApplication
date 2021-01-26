@@ -16,7 +16,7 @@ public class UserBean {
 	private Date latestLocationTimestamp;
 	private List<VisitedLocationBean> visitedLocationsList = new ArrayList<>();
 	private List<UserRewardBean> userRewardsList = new ArrayList<>();
-	private UserTripPreferencesBean bean = new UserTripPreferencesBean();
+	private UserTripPreferencesBean preferences = new UserTripPreferencesBean();
 	private List<ProviderBean> tripDealsList = new ArrayList<>();
 	
 	public UserBean() {
@@ -86,12 +86,12 @@ public class UserBean {
 		this.userRewardsList = userRewardsList;
 	}
 
-	public UserTripPreferencesBean getBean() {
-		return bean;
+	public UserTripPreferencesBean getPreferences() {
+		return preferences;
 	}
 
-	public void setBean(UserTripPreferencesBean bean) {
-		this.bean = bean;
+	public void setPreferences(UserTripPreferencesBean preferences) {
+		this.preferences = preferences;
 	}
 
 	public List<ProviderBean> getTripDealsList() {
