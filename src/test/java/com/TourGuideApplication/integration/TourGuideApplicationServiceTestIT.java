@@ -17,16 +17,14 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import com.TourGuideApplication.bean.AttractionBean;
 import com.TourGuideApplication.bean.LocationBean;
@@ -38,21 +36,20 @@ import com.TourGuideApplication.form.UserTripPreferencesForm;
 import com.TourGuideApplication.proxy.LocationProxy;
 import com.TourGuideApplication.proxy.RewardsProxy;
 import com.TourGuideApplication.proxy.UserProxy;
-import com.TourGuideApplication.service.TourGuideApplicationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
-@SpringBootTest
+@SpringBootTest()
 @ExtendWith(SpringExtension.class)
-@PropertySource("classpath:application.properties")
+@TestPropertySource(properties="closestAttractionsRetrieved.number = 2")
 @AutoConfigureMockMvc
 class TourGuideApplicationServiceTestIT {
 
 	@Autowired
 	private MockMvc mockMvc;
-
+	
 	@Autowired
 	private ObjectMapper objectMapper;
 
@@ -163,28 +160,31 @@ class TourGuideApplicationServiceTestIT {
 		.andExpect(jsonPath("$.[0].rewardCentralPoints").value(5000));
 	}
 
-	/*
+	
 	@Test
 	void getTheUserClosestAttractionsListTest() throws Exception {
 		UserBean user = new UserBean();
 		user.setUserId(UUID.fromString("404729ba-ef10-49b6-a340-ee8a40a30fa5"));
+		
 		VisitedLocationBean visitedLocation = new VisitedLocationBean(user.getUserId(),new LocationBean(48.88,2.38),new Date());
 		
 		when(locationProxy.getUserLocation(user.getUserId())).thenReturn(visitedLocation);
 		
 		TreeMap<Double,AttractionBean> distancesToAttraction = new TreeMap<Double,AttractionBean>();
 		AttractionBean attraction = new AttractionBean(UUID.randomUUID(),"Buttes Chaumont","Paris","France",48.8809,2.3828);
+		AttractionBean attraction1 = new AttractionBean(UUID.randomUUID(),"Père Lachaise","Paris","France",48.8614,2.3933);
 		distancesToAttraction.put(2.50,attraction);
+		distancesToAttraction.put(3.50,attraction1);
 		
-		when(locationProxy.getDistancesToAttractions(visitedLocation.getLocation())).thenReturn(distancesToAttraction);
+		when(locationProxy.getDistancesToAttractions(any(LocationBean.class))).thenReturn(distancesToAttraction);
 		when(rewardsProxy.getAttractionRewardPoints(user.getUserId(), attraction.getAttractionId())).thenReturn(5000);
+		when(rewardsProxy.getAttractionRewardPoints(user.getUserId(), attraction1.getAttractionId())).thenReturn(5000);
 		
-		MvcResult result = mockMvc.perform(get("/users/"+user.getUserId()+"/attractions"))
+		mockMvc.perform(get("/users/"+user.getUserId()+"/attractions"))
 		.andExpect(status().isOk())
-		.andReturn();
-		String content= result.getResponse().getContentAsString();
-		System.out.println(content);
+		.andExpect(jsonPath("$.attractionDetailsList.[0].attractionName").value("Buttes Chaumont"))
+		.andExpect(jsonPath("$.attractionDetailsList.[1].attractionName").value("Père Lachaise"));
 	}
-	*/
+	
 }
 

@@ -76,8 +76,8 @@ public class TourGuideApplicationService {
 	public ClosestAttractionsList getTheUserClosestAttractionsList(UUID userId) {
 		ClosestAttractionsList userClosestAttractionsList = new ClosestAttractionsList();
 		VisitedLocationBean userLocation = locationProxy.getUserLocation(userId);
-		TreeMap<Double,AttractionBean> distancesToAttractions = getTheXFirstEntries(locationProxy.getDistancesToAttractions(userLocation.getLocation()));
-		List<AttractionDetails> attractionDetailsList = distancesToAttractions.entrySet().parallelStream().map(entry->{
+		TreeMap<Double,AttractionBean> filteredDistancesToAttractions = getTheXFirstEntries(locationProxy.getDistancesToAttractions(userLocation.getLocation()));
+		List<AttractionDetails> attractionDetailsList = filteredDistancesToAttractions.entrySet().parallelStream().map(entry->{
 			AttractionDetails attractionDetails = new ClosestAttractionsList().new AttractionDetails();
 			attractionDetails.setAttractionName(entry.getValue().getAttractionName());
 			attractionDetails.setAttractionLocation(new LocationBean (entry.getValue().getLatitude(),entry.getValue().getLongitude()));

@@ -138,15 +138,19 @@ class TourGuideApplicationServiceTest {
 		
 		TreeMap<Double,AttractionBean> distancesToAttraction = new TreeMap<Double,AttractionBean>();
 		AttractionBean attraction = new AttractionBean(UUID.randomUUID(),"Buttes Chaumont","Paris","France",48.8809,2.3828);
+		AttractionBean attraction1 = new AttractionBean(UUID.randomUUID(),"Père Lachaise","Paris","France",48.8614,2.3933);
 		distancesToAttraction.put(2.50,attraction);
+		distancesToAttraction.put(3.50,attraction1);
 	
 		when(locationProxy.getDistancesToAttractions(visitedLocation.getLocation())).thenReturn(distancesToAttraction);
 		when(rewardsProxy.getAttractionRewardPoints(user.getUserId(), attraction.getAttractionId())).thenReturn(5000);
-		tourGuideApplicationService.setAttractionRetrievedNumber(1);
+		when(rewardsProxy.getAttractionRewardPoints(user.getUserId(), attraction1.getAttractionId())).thenReturn(5000);
+		tourGuideApplicationService.setAttractionRetrievedNumber(2);
 		
 		ClosestAttractionsList closestAttractionsList = tourGuideApplicationService.getTheUserClosestAttractionsList(user.getUserId());
 		
 		assertEquals("Buttes Chaumont",closestAttractionsList.getAttractionDetailsList().get(0).getAttractionName());
+		assertEquals("Père Lachaise",closestAttractionsList.getAttractionDetailsList().get(1).getAttractionName());
 	}
 	
 }
