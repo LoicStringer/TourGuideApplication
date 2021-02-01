@@ -40,7 +40,7 @@ class TourGuideApplicationServiceTest {
 	private LocationProxy locationProxy;
 	
 	@Mock
-	private RewardsProxy rewardProxy;
+	private RewardsProxy rewardsProxy;
 	
 	@InjectMocks
 	private TourGuideApplicationService tourGuideApplicationService;
@@ -114,8 +114,7 @@ class TourGuideApplicationServiceTest {
 	}
 	
 	@Test
-	void getUseRewardsListTest() {
-		
+	void getUserRewardsListTest() {
 		List<UserRewardBean> userRewardsList  =new ArrayList<UserRewardBean>();
 		UserRewardBean userReward = new UserRewardBean();
 		userReward.setRewardCentralPoints(5000);
@@ -133,33 +132,21 @@ class TourGuideApplicationServiceTest {
 	void getTheUserClosestAttractionsListTest() {
 		UserBean user = new UserBean();
 		user.setUserId(UUID.fromString("404729ba-ef10-49b6-a340-ee8a40a30fa5"));
-		VisitedLocationBean visitedLocation = new VisitedLocationBean(user.getUserId(),new LocationBean(48.80,2.40),new Date());
+		VisitedLocationBean visitedLocation = new VisitedLocationBean(user.getUserId(),new LocationBean(48.88,2.38),new Date());
+		
 		when(locationProxy.getUserLocation(user.getUserId())).thenReturn(visitedLocation);
 		
 		TreeMap<Double,AttractionBean> distancesToAttraction = new TreeMap<Double,AttractionBean>();
-		AttractionBean attraction = new AttractionBean(user.getUserId(),"Buttes Chaumont","Paris","France",48.8809,2.3828);
+		AttractionBean attraction = new AttractionBean(UUID.randomUUID(),"Buttes Chaumont","Paris","France",48.8809,2.3828);
 		distancesToAttraction.put(2.50,attraction);
-		for(int i=0 ;i<7; i++) {
-			distancesToAttraction.put(3.50,attraction);
-		}
-		
+	
 		when(locationProxy.getDistancesToAttractions(visitedLocation.getLocation())).thenReturn(distancesToAttraction);
-		//when(rewardProxy.getAttractionRewardPoints(user.getUserId(), attraction.getAttractionId())).thenReturn(5000);
+		when(rewardsProxy.getAttractionRewardPoints(user.getUserId(), attraction.getAttractionId())).thenReturn(5000);
+		tourGuideApplicationService.setAttractionRetrievedNumber(1);
 		
 		ClosestAttractionsList closestAttractionsList = tourGuideApplicationService.getTheUserClosestAttractionsList(user.getUserId());
 		
-		System.out.println(closestAttractionsList);
+		assertEquals("Buttes Chaumont",closestAttractionsList.getAttractionDetailsList().get(0).getAttractionName());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

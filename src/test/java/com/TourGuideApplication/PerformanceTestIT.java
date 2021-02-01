@@ -2,6 +2,10 @@ package com.TourGuideApplication;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
@@ -26,16 +30,19 @@ class PerformanceTestIT {
 	
 	
 	@Test
-	void trackUserPerformanceTest() {
+	void trackUserPerformanceTest() throws IOException {
+		
 		StopWatch stopWatch = new StopWatch();
 		int[] usersNumberArray = new int[] {100,1000,5000,10000,50000,100000};
 		for (int i : usersNumberArray) {
+		
 			stopWatch.reset();
 			userProxy.performanceTestUsersGeneration(i);
 			stopWatch.start();
 			trackerService.trackUsers();
 			stopWatch.stop();
-			System.out.println("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+		
+			//System.out.println("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 			assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 		}
 	}

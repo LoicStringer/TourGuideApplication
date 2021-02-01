@@ -38,14 +38,12 @@ public class TourGuideApplicationTracker extends Thread {
 				logger.debug("Tracker stopping");
 				break;
 			}
-			System.out.println("Begin Tracker. Tracking " + trackerService.getAllUsersIdList().size() + " users.");
+			
 			logger.debug("Begin Tracker. Tracking " + trackerService.getAllUsersIdList().size() + " users.");
 
 			stopWatch.start();
 			trackUsers();
 			stopWatch.stop();
-			System.out.println(
-					"Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 			logger.debug("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 			stopWatch.reset();
 
