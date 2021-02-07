@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.TourGuideApplication.proxy.LocationProxy;
@@ -22,6 +25,7 @@ public class TrackerService {
 	public TrackerService() {
 	}
 
+	//@Scheduled(cron = "0 0/5 * * * *")
 	public void trackUsers() {
 		getAllUsersIdList().parallelStream().forEach(id -> {
 			trackUserLocation(id);

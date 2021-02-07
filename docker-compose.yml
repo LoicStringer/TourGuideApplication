@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  tourguideapplication:
+    image: tourguide-application-image
+    networks:
+      - tourguide-application-network
+    ports:
+      - "8080:8080"
+    depends_on:
+      - tourguideuserservice
+      
+  tourguidelocationservice:
+    image: tourguide-location-service-image
+    networks:
+      - tourguide-application-network
+    ports:
+      - "9004:9004"
+      
+  tourguiderewardsservice:
+    image: tourguide-rewards-service-image
+    networks:
+      - tourguide-application-network
+    ports:
+      - "9003:9003"  
+      
+  tourguidetripdealsservice:
+    image: tourguide-tripdeals-service-image
+    networks:
+      - tourguide-application-network
+    ports:
+      - "9002:9002" 
+    
+  tourguideuserservice:
+    image: tourguide-user-service-image
+    networks:
+      - tourguide-application-network
+    ports:
+      - "9001:9001" 
+    depends_on:
+      - tourguidelocationservice
+      - tourguiderewardsservice
+      - tourguidetripdealsservice
+    
+networks:
+  tourguide-application-network:

@@ -17,15 +17,16 @@ import com.TourGuideApplication.service.TrackerService;
 public class TourGuideApplicationTracker extends Thread {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private static final long trackingPollingInterval = TimeUnit.MINUTES.toSeconds(5);
+	private static final long trackingPollingInterval = TimeUnit.MINUTES.toSeconds(1);
 	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-	private boolean isRunning;
+	private boolean isRunning = false;
 	private TrackerService trackerService;
 
 	public TourGuideApplicationTracker(TrackerService trackerService,@Value("${tracker.isRunning}")boolean isRunning) {
 		this.isRunning = isRunning;
 		this.trackerService = trackerService;
+		executorService.submit(this);
 		startTracking();
 	}
 
@@ -35,20 +36,21 @@ public class TourGuideApplicationTracker extends Thread {
 		StopWatch stopWatch = new StopWatch();
 		while (isRunning) {
 			if (Thread.currentThread().isInterrupted() || isRunning == false) {
-				logger.debug("Tracker stopping");
+				logger.error("Tracker stopping");
 				break;
 			}
 			
-			logger.debug("Begin Tracker. Tracking " + trackerService.getAllUsersIdList().size() + " users.");
+			logger.error("Begin Tracker. Tracking " + trackerService.getAllUsersIdList().size() + " users.");
 
 			stopWatch.start();
 			trackUsers();
 			stopWatch.stop();
-			logger.debug("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+			
+			logger.error("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 			stopWatch.reset();
 
 			try {
-				logger.debug("Tracker sleeping");
+				logger.error("Tracker sleeping");
 				TimeUnit.SECONDS.sleep(trackingPollingInterval);
 			} catch (InterruptedException e) {
 				break;
@@ -57,10 +59,12 @@ public class TourGuideApplicationTracker extends Thread {
 
 	}
 
+
 	/**
 	 * Assures to shut down the Tracker thread
 	 */
 
+	
 	public void startTracking() {
 		if (isRunning==false) {
 			executorService.submit(this);
@@ -76,4 +80,6 @@ public class TourGuideApplicationTracker extends Thread {
 	public void trackUsers() {
 		trackerService.trackUsers();
 	}
+	
+	
 }
