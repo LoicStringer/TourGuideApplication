@@ -41,5 +41,12 @@ public class VisitedLocationBean {
 	public void setTimeVisited(Date timeVisited) {
 		this.timeVisited = timeVisited;
 	}
+
+	@Override
+	public String toString() {
+		return "VisitedLocationBean [userId=" + userId + ", location=" + location + ", timeVisited=" + timeVisited
+				+ "]";
+	}
+	
 	
 }

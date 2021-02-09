@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ import com.TourGuideApplication.responseentity.ClosestAttractionsList.Attraction
 @Service
 public class TourGuideApplicationService {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private LocationProxy locationProxy;
 	
@@ -74,6 +78,7 @@ public class TourGuideApplicationService {
 	}
 	
 	public ClosestAttractionsList getTheUserClosestAttractionsList(UUID userId) {
+		log.debug("Building the user closest attractions detailed list according to the predefined attractions number to retrieve.");
 		ClosestAttractionsList userClosestAttractionsList = new ClosestAttractionsList();
 		VisitedLocationBean userLocation = locationProxy.getUserLocation(userId);
 		TreeMap<Double,AttractionBean> filteredDistancesToAttractions = getTheXFirstEntries(locationProxy.getDistancesToAttractions(userLocation.getLocation()));

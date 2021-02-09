@@ -29,5 +29,12 @@ public class LocationBean {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
+
+	@Override
+	public String toString() {
+		return "LocationBean [latitude=" + latitude + ", longitude=" + longitude + "]";
+	}
+	
+	
 	
 }

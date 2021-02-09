@@ -17,7 +17,7 @@ import com.TourGuideApplication.bean.UserBean;
 import com.TourGuideApplication.bean.UserRewardBean;
 import com.TourGuideApplication.form.UserTripPreferencesForm;
 
-@FeignClient(name = "tourguide-user-service", url= "localhost:9001")
+@FeignClient(name = "tourguide-user-service", url= "${feign.client.user.url}")
 public interface UserProxy {
 
 	@GetMapping("/users")
@@ -29,7 +29,7 @@ public interface UserProxy {
 	@PostMapping("/users")
 	UserBean addUser(@RequestBody UserBean user);
 	
-	@GetMapping("/users/visited-locations/latest")
+	@GetMapping("/users/locations/latest")
 	Map<UUID,LocationBean> getEachUserLatestLocationList();
 
 	@PostMapping("/users/{userId}/trip-preferences")
