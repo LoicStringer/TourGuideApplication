@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +16,7 @@ import com.TourGuideApplication.bean.UserBean;
 import com.TourGuideApplication.bean.UserRewardBean;
 import com.TourGuideApplication.form.UserTripPreferencesForm;
 
-@FeignClient(name = "tourguide-user-service", url= "${feign.client.user.url}")
+@FeignClient(name = "${feign.client.user.name}", url= "${feign.client.user.url}")
 public interface UserProxy {
 
 	@GetMapping("/users")

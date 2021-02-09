@@ -47,7 +47,7 @@ public class TrackerService {
 			try {
 				executorService.awaitTermination(30, TimeUnit.MINUTES);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				log.error("Tracker service has been interrupted"+e.getMessage());
 			}
 			long time = System.currentTimeMillis() - start;
 			log.error("Tracker Time Elapsed: " + time / 1000 + " seconds.");
