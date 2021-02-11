@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,7 @@ class PerformanceTestIT {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	@Disabled
+	
 	@Test
 	void trackUserPerformanceTest() throws IOException {
 		StopWatch stopWatch = new StopWatch();
@@ -39,11 +38,11 @@ class PerformanceTestIT {
 		for (int i : usersNumberArray) {
 			stopWatch.reset();
 			userProxy.performanceTestUsersGeneration(i);
-			log.error("Begin tracking "+i+" users.");
+			log.debug("Begin tracking "+i+" users.");
 			ExecutorService executorService = Executors.newFixedThreadPool(16);
 			stopWatch.start();
 			trackerService.getAllUsersIdList().stream().forEach(id->{
-				executorService.execute(new TrackUserTaskRunnable(id, trackerService));
+				executorService.execute(trackerService.new TrackUserTaskRunnable(id));
 			});
 			executorService.shutdown();
 			try {
@@ -53,11 +52,10 @@ class PerformanceTestIT {
 			}
 			stopWatch.stop();
 			
-			log.error("Tracker Time Elapsed: " + stopWatch.getTime(TimeUnit.SECONDS)+ " seconds.");
+			log.debug("Tracker Time Elapsed: " + stopWatch.getTime(TimeUnit.SECONDS)+ " seconds.");
 			assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 		}
 	}
-	
 	
 	@Test
 	void addUserRewardPerformanceTest() {
@@ -71,7 +69,7 @@ class PerformanceTestIT {
 				trackerService.addUserReward(id);
 			});
 			stopWatch.stop();
-			System.out.println("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+			log.debug("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 			assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 		}
 	}

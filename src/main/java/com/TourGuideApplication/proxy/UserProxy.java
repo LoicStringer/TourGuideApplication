@@ -16,7 +16,7 @@ import com.TourGuideApplication.bean.UserBean;
 import com.TourGuideApplication.bean.UserRewardBean;
 import com.TourGuideApplication.form.UserTripPreferencesForm;
 
-@FeignClient(name = "${feign.client.user.name}", url= "${feign.client.user.url}")
+@FeignClient(name = "tourguide-user-service", url= "localhost:9001")
 public interface UserProxy {
 
 	@GetMapping("/users")

@@ -12,11 +12,7 @@ public class ClosestAttractionsList {
 	public ClosestAttractionsList() {
 		this.attractionDetailsList = new ArrayList<AttractionDetails>();
 	}
-/*
-	public void addAttractionDetails(AttractionDetails attractionDetails) {
-		attractionDetailsList.add(attractionDetails);
-	}
-*/	
+	
 	public List<AttractionDetails> getAttractionDetailsList() {
 		return attractionDetailsList;
 	}
