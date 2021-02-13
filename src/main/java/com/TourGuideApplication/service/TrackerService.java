@@ -6,12 +6,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.TourGuideApplication.proxy.LocationProxy;
@@ -28,55 +27,30 @@ public class TrackerService {
 	@Autowired
 	private UserProxy userProxy;
 
-	private boolean isRunning = false;
+	@Value("${scheduled.enabled}")
+	private boolean scheduledEnabled;
 
-	public TrackerService(@Value("${isRunning}")boolean isRunning) {
-		this.isRunning = isRunning;
+	public TrackerService() {
 	}
 
-	@PostConstruct
-	public void cronJobTrackUsers() {
-		ExecutorService executorService = Executors.newSingleThreadExecutor();
-		if (isRunning == false) {
-			executorService.execute(new Runnable() {
-				public void run() {
-					isRunning = true;
-					while (isRunning) {
-						if (Thread.currentThread().isInterrupted() || isRunning == false) {
-							log.error("Tracker is stopping");
-							break;
-						}
-						trackUsers();
-						try {
-							log.error("Tracker is sleeping");
-							Thread.sleep(30000);
-						} catch (InterruptedException e) {
-							log.error("Tracking is stopping");
-							executorService.shutdown();
-							break;
-						}
-					}
-
-				}
-			});
-		}
-	}
-
+	@Scheduled(cron = "0 0/5 * * * *")
 	public void trackUsers() {
-		log.debug("Begin tracking " + getAllUsersIdList().size() + " users.");
-		ExecutorService executorService = Executors.newFixedThreadPool(16);
-		long start = System.currentTimeMillis();
-		getAllUsersIdList().stream().forEach(id -> {
-			executorService.execute(new TrackUserTaskRunnable(id));
-		});
-		executorService.shutdown();
-		try {
-			executorService.awaitTermination(30, TimeUnit.MINUTES);
-		} catch (InterruptedException e) {
-			log.debug("Tracker service has been interrupted" + e.getMessage());
+		if (scheduledEnabled == true) {
+			log.error("Begin tracking " + getAllUsersIdList().size() + " users.");
+			ExecutorService executorService = Executors.newFixedThreadPool(16);
+			long start = System.currentTimeMillis();
+			getAllUsersIdList().stream().forEach(id -> {
+				executorService.execute(new TrackUserTaskRunnable(id));
+			});
+			executorService.shutdown();
+			try {
+				executorService.awaitTermination(30, TimeUnit.MINUTES);
+			} catch (InterruptedException e) {
+				log.error("Tracker service has been interrupted" + e.getMessage());
+			}
+			long time = System.currentTimeMillis() - start;
+			log.error("Tracker Time Elapsed: " + time / 1000 + " seconds.");
 		}
-		long time = System.currentTimeMillis() - start;
-		log.debug("Tracker Time Elapsed: " + time / 1000 + " seconds.");
 	}
 
 	public List<UUID> getAllUsersIdList() {
