@@ -6,8 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableScheduling
 @EnableFeignClients("com.TourGuideApplication")
+@EnableScheduling
 public class TourGuideApplication {
 
 	public static void main(String[] args) {

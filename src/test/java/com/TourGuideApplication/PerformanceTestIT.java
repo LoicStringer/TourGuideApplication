@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -25,25 +26,24 @@ class PerformanceTestIT {
 
 	@Autowired
 	private UserProxy userProxy;
-	
+
 	@Autowired
 	private TrackerService trackerService;
-	
+
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@Disabled
+
 	@Test
 	void trackUserPerformanceTest() throws IOException {
 		StopWatch stopWatch = new StopWatch();
-		int[] usersNumberArray = new int[] {100,1000,5000,10000,50000,100000};
+		int[] usersNumberArray = new int[] { 100, 1000, 5000, 10000, 50000, 100000 };
 		for (int i : usersNumberArray) {
 			stopWatch.reset();
 			userProxy.performanceTestUsersGeneration(i);
-			log.error("Begin tracking "+i+" users.");
+			log.error("Begin tracking " + i + " users.");
 			ExecutorService executorService = Executors.newFixedThreadPool(16);
 			stopWatch.start();
-			trackerService.getAllUsersIdList().stream().forEach(id->{
-				executorService.execute(new TrackUserTaskRunnable(id, trackerService));
+			trackerService.getAllUsersIdList().stream().forEach(id -> {
+				executorService.execute(trackerService.new TrackUserTaskRunnable(id));
 			});
 			executorService.shutdown();
 			try {
@@ -52,26 +52,27 @@ class PerformanceTestIT {
 				e.printStackTrace();
 			}
 			stopWatch.stop();
-			
-			log.error("Tracker Time Elapsed: " + stopWatch.getTime(TimeUnit.SECONDS)+ " seconds.");
+
+			log.error("Tracker Time Elapsed: " + stopWatch.getTime(TimeUnit.SECONDS) + " seconds.");
 			assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 		}
+
 	}
-	
-	
+
+	@Disabled
 	@Test
 	void addUserRewardPerformanceTest() {
 		StopWatch stopWatch = new StopWatch();
-		int[] usersNumberArray = new int[] {100,1000,5000,10000,50000,100000};
+		int[] usersNumberArray = new int[] { 100, 1000, 5000, 10000, 50000, 100000 };
 		for (int i : usersNumberArray) {
 			stopWatch.reset();
 			userProxy.performanceTestUsersGeneration(i);
 			stopWatch.start();
-			trackerService.getAllUsersIdList().parallelStream().forEach(id->{
+			trackerService.getAllUsersIdList().parallelStream().forEach(id -> {
 				trackerService.addUserReward(id);
 			});
 			stopWatch.stop();
-			System.out.println("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+			log.error("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 			assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 		}
 	}

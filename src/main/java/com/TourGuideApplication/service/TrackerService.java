@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.TourGuideApplication.TrackUserTaskRunnable;
 import com.TourGuideApplication.proxy.LocationProxy;
 import com.TourGuideApplication.proxy.UserProxy;
 
@@ -27,32 +26,31 @@ public class TrackerService {
 
 	@Autowired
 	private UserProxy userProxy;
-	
-	private boolean scheduledIsEnabled ;
 
-	public TrackerService(@Value("${scheduled.enable}")boolean scheduledIsEnabled) {
-		this.scheduledIsEnabled=scheduledIsEnabled;
+	@Value("${scheduled.enabled}")
+	private boolean scheduledEnabled;
+
+	public TrackerService() {
 	}
 
-	@Scheduled(initialDelay = 0, fixedDelay = 300000)
+	@Scheduled(cron = "0 0/5 * * * *")
 	public void trackUsers() {
-		if(scheduledIsEnabled) {
-			log.error("Begin tracking "+getAllUsersIdList().size()+ " users.");
+		if (scheduledEnabled == true) {
+			log.error("Begin tracking " + getAllUsersIdList().size() + " users.");
 			ExecutorService executorService = Executors.newFixedThreadPool(16);
 			long start = System.currentTimeMillis();
 			getAllUsersIdList().stream().forEach(id -> {
-				executorService.execute(new TrackUserTaskRunnable(id,this));
+				executorService.execute(new TrackUserTaskRunnable(id));
 			});
 			executorService.shutdown();
 			try {
 				executorService.awaitTermination(30, TimeUnit.MINUTES);
 			} catch (InterruptedException e) {
-				log.error("Tracker service has been interrupted"+e.getMessage());
+				log.error("Tracker service has been interrupted" + e.getMessage());
 			}
 			long time = System.currentTimeMillis() - start;
 			log.error("Tracker Time Elapsed: " + time / 1000 + " seconds.");
 		}
-		
 	}
 
 	public List<UUID> getAllUsersIdList() {
@@ -66,5 +64,21 @@ public class TrackerService {
 
 	public void addUserReward(UUID userId) {
 		userProxy.addUserReward(userId);
+	}
+
+	public class TrackUserTaskRunnable implements Runnable {
+
+		private UUID userId;
+
+		public TrackUserTaskRunnable(UUID userId) {
+			this.userId = userId;
+		}
+
+		@Override
+		public void run() {
+			trackUserLocation(userId);
+			addUserReward(userId);
+		}
+
 	}
 }
