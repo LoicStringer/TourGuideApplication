@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-@FeignClient(name = "tourguide-rewards-service", url = "localhost:9003")
+@FeignClient(name = "${feignClient.rewardsSservice.name}", url = "${feignClient.rewardsService.url}")
 public interface RewardsProxy {
 
 

@@ -7,7 +7,7 @@ import org.javamoney.moneta.Money;
 public class UserTripPreferencesBean {
 	
 	private int attractionProximity ;
-	private CurrencyUnit currency  ;
+	private CurrencyUnit currency ;
 	private Money lowerPricePoint ;
 	private Money highPricePoint ;
 	private int tripDuration ;

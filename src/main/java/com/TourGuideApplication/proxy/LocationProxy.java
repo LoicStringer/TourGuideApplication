@@ -13,8 +13,9 @@ import com.TourGuideApplication.bean.AttractionBean;
 import com.TourGuideApplication.bean.LocationBean;
 import com.TourGuideApplication.bean.VisitedLocationBean;
 
-@FeignClient(name = "tourguide-location-service", url="localhost:9004")
+@FeignClient(name = "${feignClient.locationService.name}", url="${feignClient.locationService.url}")
 public interface LocationProxy {
+
 
 	@GetMapping("/users/{userId}/locations/latest")
 	VisitedLocationBean getUserLocation(@PathVariable("userId")UUID userId);

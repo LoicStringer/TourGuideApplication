@@ -2,6 +2,8 @@ package com.TourGuideApplication.exception;
 
 import java.time.LocalDateTime;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,15 @@ import feign.FeignException;
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(FeignException.class)
-	public ResponseEntity<ExceptionResponse> handleFeignException(FeignException feignException) {
-		ExceptionResponse exceptionResponse = buildFeignExceptionResponse(feignException);
+	public ResponseEntity<ExceptionResponse> handleFeignException(FeignException feignException,HttpServletResponse response) {
+		response.setStatus(feignException.status());
+		ExceptionResponse exceptionResponse = buildFeignExceptionResponse(feignException,response);
 		return new ResponseEntity<ExceptionResponse>(exceptionResponse, getHttpStatusFromException(feignException));
 	}
 	
-	private ExceptionResponse buildFeignExceptionResponse(FeignException fEx) {
-		int statusCode = fEx.status();
-		HttpStatus status = HttpStatus.valueOf(statusCode);
+	private ExceptionResponse buildFeignExceptionResponse(FeignException fEx,HttpServletResponse response) {
+		response.setStatus(fEx.status());
+		HttpStatus status = HttpStatus.valueOf(response.getStatus());
 		String feignExceptionStatus = status.toString();
 		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(), feignExceptionStatus,
 				fEx.getCause().toString(), fEx.getMessage());

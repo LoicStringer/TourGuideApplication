@@ -1,46 +1,58 @@
 version: "3.8"
 
 services:
-  tourguideapplication:
+  tourguide-application:
     image: tourguide-application-image
     networks:
       - tourguide-application-network
     ports:
       - "8080:8080"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
     depends_on:
-      - tourguideuserservice
+      - tourguide-user-service
       
-  tourguidelocationservice:
+  tourguide-location-service:
     image: tourguide-location-service-image
     networks:
       - tourguide-application-network
     ports:
       - "9004:9004"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
       
-  tourguiderewardsservice:
+  tourguide-rewards-service:
     image: tourguide-rewards-service-image
     networks:
       - tourguide-application-network
     ports:
       - "9003:9003"  
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"  
       
-  tourguidetripdealsservice:
+  tourguide-tripdeals-service:
     image: tourguide-tripdeals-service-image
     networks:
       - tourguide-application-network
     ports:
       - "9002:9002" 
-    
-  tourguideuserservice:
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+       
+  tourguide-user-service:
     image: tourguide-user-service-image
     networks:
       - tourguide-application-network
     ports:
       - "9001:9001" 
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
     depends_on:
-      - tourguidelocationservice
-      - tourguiderewardsservice
-      - tourguidetripdealsservice
+      - tourguide-location-service
+      - tourguide-rewards-service
+      - tourguide-tripdeals-service
     
 networks:
   tourguide-application-network:
+    driver: bridge
+    

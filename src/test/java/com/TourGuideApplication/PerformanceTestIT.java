@@ -3,8 +3,7 @@ package com.TourGuideApplication;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
@@ -15,61 +14,65 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.TourGuideApplication.bean.UserRewardBean;
+import com.TourGuideApplication.bean.VisitedLocationBean;
 import com.TourGuideApplication.proxy.UserProxy;
-import com.TourGuideApplication.service.TrackerService;
+import com.TourGuideApplication.service.TourGuideApplicationAsyncService;
+import com.TourGuideApplication.service.TourGuideApplicationService;
 
 @ActiveProfiles("test")
 @SpringBootTest
 class PerformanceTestIT {
 
 	@Autowired
-	private UserProxy userProxy;
+	private TourGuideApplicationAsyncService tourGuideApplicationAsyncService;
 	
 	@Autowired
-	private TrackerService trackerService;
+	private TourGuideApplicationService tourGuideApplicationService;
 	
+	@Autowired
+	private UserProxy userProxy;
+
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
+	private CompletableFuture<VisitedLocationBean> userLocationCompletableFuture ;
+	private CompletableFuture<UserRewardBean> userRewardCompletableFuture ;
 	
 	@Test
-	void trackUserPerformanceTest() throws IOException {
+	void trackUserLocationPerformanceTest() throws IOException {
 		StopWatch stopWatch = new StopWatch();
-		int[] usersNumberArray = new int[] {100,1000,5000,10000,50000,100000};
+		int[] usersNumberArray = new int[] { 100, 1000, 5000, 10000, 50000, 100000 };
 		for (int i : usersNumberArray) {
 			stopWatch.reset();
 			userProxy.performanceTestUsersGeneration(i);
-			log.debug("Begin tracking "+i+" users.");
-			ExecutorService executorService = Executors.newFixedThreadPool(16);
+			log.debug("Begin tracking " + i + " users.");
 			stopWatch.start();
-			trackerService.getAllUsersIdList().stream().forEach(id->{
-				executorService.execute(trackerService.new TrackUserTaskRunnable(id));
+			tourGuideApplicationService.getAllUsersIdList().stream().forEach(id -> {
+				userLocationCompletableFuture = tourGuideApplicationAsyncService.trackUserLocation(id);
 			});
-			executorService.shutdown();
-			try {
-				executorService.awaitTermination(30, TimeUnit.MINUTES);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			CompletableFuture.allOf(userLocationCompletableFuture).join();
 			stopWatch.stop();
-			
-			log.debug("Tracker Time Elapsed: " + stopWatch.getTime(TimeUnit.SECONDS)+ " seconds.");
+
+			log.debug("Tracking Time Elapsed: " + stopWatch.getTime(TimeUnit.SECONDS) + " seconds.");
 			assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 		}
+
 	}
-	
+
 	@Test
 	void addUserRewardPerformanceTest() {
 		StopWatch stopWatch = new StopWatch();
-		int[] usersNumberArray = new int[] {100,1000,5000,10000,50000,100000};
+		int[] usersNumberArray = new int[] { 100, 1000, 10000, 100000 };
 		for (int i : usersNumberArray) {
 			stopWatch.reset();
 			userProxy.performanceTestUsersGeneration(i);
+			log.debug("Begin adding rewards for " + i + " users.");
 			stopWatch.start();
-			trackerService.getAllUsersIdList().parallelStream().forEach(id->{
-				trackerService.addUserReward(id);
+			tourGuideApplicationService.getAllUsersIdList().stream().forEach(id -> {
+				userRewardCompletableFuture = tourGuideApplicationAsyncService.addUserReward(id);
 			});
+			CompletableFuture.allOf(userRewardCompletableFuture).join();
 			stopWatch.stop();
-			log.debug("Tracker Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+			log.debug("Adding Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 			assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 		}
 	}
