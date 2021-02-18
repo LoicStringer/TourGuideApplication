@@ -8,21 +8,22 @@ public class AttractionBean {
 	private String attractionName;
 	private String city;
 	private String state;
-	private double longitude;
 	private double latitude;
+	private double longitude;
+	
     
 	public AttractionBean() {
 	}
 
-	public AttractionBean(UUID attractionId, String attractionName, String city, String state, double longitude,
-			double latitude) {
+	public AttractionBean(UUID attractionId, String attractionName, String city, String state, double latitude,
+			double longitude) {
 		super();
 		this.attractionId = attractionId;
 		this.attractionName = attractionName;
 		this.city = city;
 		this.state = state;
-		this.longitude = longitude;
 		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 
 	public UUID getAttractionId() {
@@ -57,20 +58,20 @@ public class AttractionBean {
 		this.state = state;
 	}
 
-	public double getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
 	public double getLatitude() {
 		return latitude;
 	}
 
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 
 	

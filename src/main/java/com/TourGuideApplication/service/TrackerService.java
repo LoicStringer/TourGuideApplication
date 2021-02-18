@@ -1,10 +1,6 @@
 package com.TourGuideApplication.service;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,72 +9,41 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.TourGuideApplication.proxy.LocationProxy;
-import com.TourGuideApplication.proxy.UserProxy;
+import com.TourGuideApplication.bean.UserRewardBean;
+import com.TourGuideApplication.bean.VisitedLocationBean;
 
 @Service
 public class TrackerService {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-
+	
 	@Autowired
-	private LocationProxy locationProxy;
-
+	private TourGuideApplicationService tourGuideApplicationService;
+	
 	@Autowired
-	private UserProxy userProxy;
-
+	private TourGuideApplicationAsyncService tourGuideApplicationAsyncService;
+	
 	@Value("${scheduled.enabled}")
 	private boolean scheduledEnabled;
 
+	private CompletableFuture<VisitedLocationBean> userLocation;
+	private CompletableFuture<UserRewardBean> userReward;
+	
 	public TrackerService() {
 	}
 
-	@Scheduled(cron = "0 0/5 * * * *")
+	@Scheduled(initialDelay = 0, fixedDelay = 60000)
 	public void trackUsers() {
 		if (scheduledEnabled == true) {
-			log.error("Begin tracking " + getAllUsersIdList().size() + " users.");
-			ExecutorService executorService = Executors.newFixedThreadPool(16);
+			log.debug("Begin tracker service for " + tourGuideApplicationService.getAllUsersIdList().size() + " users.");
 			long start = System.currentTimeMillis();
-			getAllUsersIdList().stream().forEach(id -> {
-				executorService.execute(new TrackUserTaskRunnable(id));
+			tourGuideApplicationService.getAllUsersIdList().stream().forEach(id -> {
+				userLocation = tourGuideApplicationAsyncService.trackUserLocation(id);
+				userReward = tourGuideApplicationAsyncService.addUserReward(id);
 			});
-			executorService.shutdown();
-			try {
-				executorService.awaitTermination(30, TimeUnit.MINUTES);
-			} catch (InterruptedException e) {
-				log.error("Tracker service has been interrupted" + e.getMessage());
-			}
+			CompletableFuture.allOf(userLocation,userReward).join();
 			long time = System.currentTimeMillis() - start;
-			log.error("Tracker Time Elapsed: " + time / 1000 + " seconds.");
+			log.debug("Tracker service Time Elapsed: " + time / 1000 + " seconds.");
 		}
-	}
-
-	public List<UUID> getAllUsersIdList() {
-		List<UUID> allUsersIdList = userProxy.getAllUsersIdList();
-		return allUsersIdList;
-	}
-
-	public void trackUserLocation(UUID userId) {
-		locationProxy.getUserLocation(userId);
-	}
-
-	public void addUserReward(UUID userId) {
-		userProxy.addUserReward(userId);
-	}
-
-	public class TrackUserTaskRunnable implements Runnable {
-
-		private UUID userId;
-
-		public TrackUserTaskRunnable(UUID userId) {
-			this.userId = userId;
-		}
-
-		@Override
-		public void run() {
-			trackUserLocation(userId);
-			addUserReward(userId);
-		}
-
 	}
 }

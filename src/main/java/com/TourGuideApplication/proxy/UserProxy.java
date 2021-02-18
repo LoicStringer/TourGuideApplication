@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.TourGuideApplication.bean.LocationBean;
 import com.TourGuideApplication.bean.ProviderBean;
 import com.TourGuideApplication.bean.UserBean;
+
 import com.TourGuideApplication.bean.UserRewardBean;
 import com.TourGuideApplication.form.UserTripPreferencesForm;
 
@@ -40,7 +41,7 @@ public interface UserProxy {
 	@GetMapping("/users/{userId}/rewards")
 	List<UserRewardBean> getUserRewardList(@PathVariable ("userId")UUID userId);
 
-	@PostMapping("/users/{userId}/rewards/latest")
+	@GetMapping("/users/{userId}/rewards/latest")
 	UserRewardBean addUserReward(@PathVariable ("userId")UUID userId);
 	
 	@PostMapping("/tests/performance/locations")

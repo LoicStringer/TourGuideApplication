@@ -59,6 +59,20 @@ public class TourGuideApplicationService {
 		return user;
 	}
 	
+	public List<UUID> getAllUsersIdList() {
+		List<UUID> allUsersIdList = userProxy.getAllUsersIdList();
+		return allUsersIdList;
+	}
+
+	
+	public VisitedLocationBean trackUserLocation(UUID userId) {
+		return(locationProxy.getUserLocation(userId));
+	}
+	
+	public UserRewardBean addUserReward(UUID userId) {
+		return(userProxy.addUserReward(userId));
+	}
+
 	public LocationBean getUserLocation(UUID userId) {
 		return locationProxy.getUserLocation(userId).getLocation();
 	}
